@@ -1,3 +1,3 @@
-Final year project 2021 
+Final year project, MTU, 2021 
 - Predictive Maintenance for IoT Devices
 
