@@ -1,0 +1,78 @@
+import React,  { Component }  from 'react';
+import '../App.css';
+import './css/VarChecklist.css'
+import Button from '@material-ui/core/Button';
+
+class VarChecklist extends Component {
+
+  constructor(props) {
+    super(props);
+    this.checkedVars  = {};
+    this.varStack = [];
+    this.device = this.props.device;
+    this.device.vars.map((varName, idx)=>{
+       this.checkedVars[varName] = false;
+    });
+  }
+
+  componentDidMount = () => {}
+
+  handleCheckboxChange = (e) =>{
+    this.device.vars.map((varName, idx)=>{
+      this.checkedVars[varName] = false;
+    });
+
+    this.checkedVars[e.target.id] = e.target.checked;
+    this.forceUpdate();
+    if ( e.target.checked) {
+      this.props.callBack(e.target.name);
+    }
+    else this.props.callBack(null);
+    // if (e.target.checked) {
+    //       this.checkedVars[e.target.id] = true
+    //       this.varStack.push(e.target.name);
+    //       this.props.callBack(this.checkedVars, e.target.name);
+    // }
+    // else {
+    //   this.varStack.splice( this.varStack.indexOf(e.target.name), 1);
+    //   this.props.callBack(this.checkedVars, this.varStack[this.varStack.length-1]);
+    // }
+  }
+
+  toggleCheckAll = () =>{
+    var flag = false;
+    this.device.vars.map((varName, idx)=>{
+        if (this.checkedVars[varName]==true) flag = true;
+    });
+    this.device.vars.map((varName, idx)=>{
+      this.checkedVars[varName] = !flag;
+    });
+    this.props.callBack(this.checkedVars);
+  }
+
+  render() {
+
+    var checkBoxes = this.device.vars.map((varName, idx)=>{
+       return (
+        <label className="container" style = {{marginLeft:"15px"}}>{varName}
+        <input type="checkbox" id = {varName} name = {varName} onChange={this.handleCheckboxChange} checked={this.checkedVars[varName]}/>
+        <span className="checkmark"></span>
+        </label>
+      
+       );
+    })
+  
+    return(
+          <div>
+              <p><b>{this.device.model_id}/{this.device.device_id}</b> device vars:</p>
+              <div style = {{marginTop: '15px', marginBottom: '15px'}}>
+                      <Button onClick ={this.toggleCheckAll} variant="contained"  size = "small" >Toggle All</Button>
+              </div>
+              {checkBoxes}
+          </div>
+      );
+    }
+  }
+ 
+
+  export default VarChecklist;

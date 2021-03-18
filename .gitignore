@@ -1,0 +1,10 @@
+# react
+/apps/node-react/node_modules
+/apps/node-react/build
+
+# flask
+/apps/flask-mqtt/.spyproject
+/apps/flask-mqtt/__pycache__
+
+
+

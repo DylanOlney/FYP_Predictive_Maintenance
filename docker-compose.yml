@@ -1,0 +1,80 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    image: nginx:1.17.10
+    container_name: reverse_proxy
+    depends_on:
+        - mqtt-broker
+        - node-react
+        - mongo-express
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./passwd.file:/etc/nginx/.htpasswd
+    ports:
+      - 80:80
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    volumes:
+      - dbdata:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    expose:
+      - "27017"
+
+
+  mqtt-broker:
+    container_name: mqtt-broker
+    image: eclipse-mosquitto
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+  
+
+  flask-mqtt:
+    container_name: flask-mqtt
+    build: ./apps/flask-mqtt
+    restart: always
+    tty: true        
+    volumes:
+      - ./apps/flask-mqtt/main.py:/app/main.py
+      - ./apps/flask-mqtt/models:/app/models
+    expose:
+      - "80"
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    restart: always
+    expose:
+      - "8081"
+    environment:
+      ME_CONFIG_OPTIONS_EDITORTHEME: ambiance
+      ME_CONFIG_SITE_BASEURL: /mongo-admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+    
+      
+  node-react:
+     container_name: node-react
+     build: ./apps/node-react
+     restart: always
+     tty: true
+     volumes:
+      - ./apps/node-react/server.js:/app/server.js
+      - ./apps/node-react/dbDefaults.js:/app/dbDefaults.js
+      - ./apps/node-react/dbSchema.js:/app/dbSchema.js
+      - ./apps/node-react/api_routes:/app/api_routes
+      - ./apps/node-react/build:/app/build
+     expose: 
+       - "80"
+
+volumes:
+  dbdata:
+  

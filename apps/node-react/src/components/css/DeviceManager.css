@@ -1,0 +1,26 @@
+
+
+.container-div {
+  background-color: rgba(73,79,82,0.5);
+  border-radius: 10px;
+  box-shadow: 5px 10px 18px black;
+  padding: 40px;
+  margin: 50px auto;
+  text-align: left;
+  max-height: fit-content;
+  max-width: fit-content;
+}
+
+
+.listBox {
+  background-color:rgba(235, 221, 203, 0.836);
+  box-shadow: 5px 10px 18px black inset;
+  color: black;
+  border-radius: 10px;
+  padding:5px;
+  width: 250px;
+  height: 300px;
+  overflow: auto;
+  margin: 10px auto;
+}
+

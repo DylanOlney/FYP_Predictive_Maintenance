@@ -1,0 +1,31 @@
+{ 
+    "cycle": val, 
+    "op1": val, 
+    "op2": val, 
+    "op3": val, 
+    "sensor1": val, 
+    "sensor2": val, 
+    "sensor3": val, 
+    "sensor4": val, 
+    "sensor5": val, 
+    "sensor6": val, 
+    "sensor7": val, 
+    "sensor8": val, 
+    "sensor9": val, 
+    "sensor10": val, 
+    "sensor11": val, 
+    "sensor12": val, 
+    "sensor13": val, 
+    "sensor14": val, 
+    "sensor15": val, 
+    "sensor16": val, 
+    "sensor17": val, 
+    "sensor18": val, 
+    "sensor19": val, 
+    "sensor20": val, 
+    "sensor21": val, 
+    "sensor22": val, 
+    "sensor23": val 
+}
+
+(where 'val' represents the variable's value)

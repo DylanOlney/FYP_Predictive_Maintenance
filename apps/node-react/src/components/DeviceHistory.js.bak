@@ -1,0 +1,196 @@
+import React,  { Component }  from 'react';
+import { withRouter } from 'react-router-dom';
+import '../App.css';
+import './css/DeviceHistory.css';
+import VarChecklist from './VarChecklist'
+import MessageDialog from './dialogs/MessageDialog';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import SplineChart from './SplineChart';
+import DiscreteSlider from  './DiscreteSlider';
+import Button from '@material-ui/core/Button';
+import moment from 'moment';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+const Scroll   = require('react-scroll');
+const Element  = Scroll.Element;
+const scroller = Scroll.scroller;
+const scroll    = Scroll.animateScroll
+/* const styles = theme => ({
+  drawerPaper: { background: "blue" }
+}); */
+
+class DeviceHistory extends Component {
+  
+  constructor(props) {
+    super(props);
+    
+    this.app = this.props.app;
+    this.user = this.app.getUser();
+    this.deviceData = [];
+    this.graphData = [];
+    this.graphs = [];
+    this.historyLimit = 0;
+    this.startTime = 0;
+    var params = new URLSearchParams(window.location.search);
+    this.model_id =  params.get('model_id');
+    this.device_id = params.get('device_id');
+    this.sortAlphaNum = (a, b) => a.localeCompare(b, 'en', { numeric: true })
+    this.state = {
+      showNoDataMsg: false,
+      loading: false,
+      loadingMessage: "Loading...",
+      lastChecked: null
+    }
+  }
+
+  checkListCallBack=(v)=>{
+    this.setState({lastChecked: v})
+  }
+
+  componentDidMount = () => {
+     
+  }
+
+  componentDidUpdate = () => {
+    if (this.state.lastChecked != null){
+      scroller.scrollTo(this.state.lastChecked, {
+        duration: 1500,
+        delay: 0,
+        smooth: true,
+        containerId: 'graphs-container'
+      });
+    }
+  }
+
+  getDeviceData = async() => {
+    this.setState({
+      loading: true
+    })
+    var query = {'user_id': this.user.userId, 'model_id':this.model_id, 'device_id':this.device_id, 'limit': this.historyLimit} 
+    var res = await this.app.getTopicData(query);
+    
+    if (res.status == 'ok') {
+      
+      this.deviceData = res.topicData
+      if (this.deviceData.length == 0) {
+        this.setState({showNoDataMsg: true})
+        return;
+      }
+    }
+    else if (res.status == 'error'){
+      this.setState({loading: false})
+      alert(res.msg);
+      return;
+    }
+
+    this.deviceData.sort((a, b)=> {return a.time - b.time;});
+    var varNames = Object.keys(this.deviceData[0].values).sort(this.sortAlphaNum);
+    this.graphData = varNames.map((varName, i)=>{
+      var graphValues = this.deviceData.map((entry, j)=>{
+        if (j==0) this.startTime = Math.round(entry.time);
+        var varTime = Math.round(entry.time) - this.startTime;
+        return {'time': varTime, 'value': entry.values[varName] }
+      });
+      var temp = {}
+      temp [varName] = graphValues;
+      return temp;
+    });
+
+    this.graphs = this.graphData.map((entry, idx)=>{
+      var varName = Object.keys(entry)[0];
+      var data = entry[varName];
+      return (<Element name={varName} key = {idx}><SplineChart data = {data} title = {varName} /></Element>)
+   });
+
+    this.setState({loading: false});
+  }
+
+  sliderCallBack = (val) => {
+       this.historyLimit = val;
+  }
+
+  componentWillUnmount = () =>{
+     this.props.app.removeTempNavLink(); 
+  }
+
+  render() {
+    var centreContent = null;
+    var leftContent = null;
+    var rightContent = null;
+
+    if (this.state.loading  ){
+      if (!this.state.showNoDataMsg){
+        centreContent = (
+          <div style = {{marginTop:'50px', marginBotton: '100px', textAlign:'center'}}>
+          <h3>{this.state.loadingMessage}</h3>
+          <div style = {{marginTop:'30px'}}><CircularProgress size = {55} thickness = {5.0}/></div>
+          </div>);
+      }
+    }
+
+    else {
+
+          var device = {vars: [], model_id: null , device_id: null}
+
+          if (this.deviceData.length > 0){
+              device['vars'] = Object.keys(this.deviceData[0].values).sort(this.sortAlphaNum);
+              device['model_id'] = this.model_id;
+              device['device_id'] = this.device_id;
+              leftContent = (<VarChecklist device = {device} callBack = {this.checkListCallBack}/>)
+  
+              var st =  moment(this.startTime * 1000).toObject();
+              var timeInfo = (<p><span>Start time (t = 0) = {st.hours}:{st.minutes}:{st.seconds}</span> 
+                   <span style = {{marginLeft:'20px'}}>on: {st.date}/{st.months}/{st.years}</span></p>)
+      
+            
+              if (this.graphs.length === 0){
+                  centreContent = (
+                      <div className = 'sub-div'>
+                        <div>
+                            <h3>{device.model_id}/{device.device_id}</h3>
+                            <CheckCircleIcon style={{ color: 'green' , fontSize: '50px'}}/>
+                            <h3>{this.deviceData.length} records returned.</h3>
+                        </div>
+                        <p>Select device variables on the left to view charts of their values. </p>
+                     </div>);}
+              else {
+                centreContent = (
+                  <div>
+                      <h3 style = {{marginTop: '20px'}}>Charts for {device.model_id}/{device.device_id}:</h3> 
+                      {timeInfo}
+                      <div className = 'sub-div' id='graphs-container'>
+                        {this.graphs}
+                      </div> 
+                </div>);
+              }
+          }
+        
+          else {
+             centreContent = (
+             <div style={{textAlign:'center'}}>
+                  <h3 style={{textAlign:'center', marginTop: '70px'}}>Device history query limiter.</h3>
+                  <div style={{textAlign:'center'}}><DiscreteSlider callBack = {this.sliderCallBack}/></div>
+                  <div style = {{marginTop: '25px'}}>
+                      <Button onClick= {() => {this.getDeviceData()}} variant="contained"  size = "small" fullWidth = {false}>Get History</Button>
+                  </div>
+             </div>
+            )
+          }
+    }
+
+    return (
+          <div style = {{textAlign:"center", overflow:'auto', height:'100vh', width:'100vw'}}>
+              <div className = "left-sidebar">{leftContent}</div>
+              <div className = "central-block">{centreContent}</div>
+              <div className = "right-sidebar">{rightContent}</div>
+              <MessageDialog  title = {"No data yet!"}
+                              textLines = {["No data has been published for this device yet!"]} 
+                              onDialogClose = {() => {this.props.history.push("/devices");}}
+                              open = {this.state.showNoDataMsg}/>
+          </div>
+      );
+    }
+  }
+ 
+
+  export default withRouter(DeviceHistory);

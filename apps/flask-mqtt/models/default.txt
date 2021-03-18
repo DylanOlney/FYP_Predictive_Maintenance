@@ -1,0 +1,15 @@
+This topic has no explicitly defined payload or variable names associated with it.
+Payloads published to this topic can have arbitrary variable names but payloads must be consistent.
+
+Sample payload JSON:
+
+{ 
+    "var1": val, 
+    "var2": val, 
+    "var3": val, 
+    .
+    .
+    etc.
+}
+
+(where 'val' represents the variable's value)
