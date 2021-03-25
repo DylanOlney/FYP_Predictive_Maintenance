@@ -10,12 +10,12 @@ import paho.mqtt.client as mqtt
 import json
 def main():
     client = mqtt.Client("client")
-    #client.connect('165.22.112.131', 1883)
-    client.connect('127.0.0.1', 1883)
+    client.connect('165.22.112.131', 1883)
+    #client.connect('127.0.0.1', 1883)
     file = open("f91.txt", 'r')
   
-    user_id ="602b1ac86e61b66332040b52"  #"5f4e64e72023721e086f4c95" 
-    model_id = "test" #"NasaTurbofan"
+    user_id = "5f4e64e72023721e086f4c95" #"602b1ac86e61b66332040b52"  
+    model_id = "NasaTurbofan"
     
     for line in file.readlines():
             time.sleep(1)
