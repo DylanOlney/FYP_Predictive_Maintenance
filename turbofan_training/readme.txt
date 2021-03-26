@@ -1,4 +1,3 @@
-
 Data Set: FD001
 Train trjectories: 100
 Test trajectories: 100
