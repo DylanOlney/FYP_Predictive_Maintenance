@@ -1,6 +1,3 @@
-push.bat
-push.vbs
-
 # react
 /apps/node-react/node_modules
 /apps/node-react/build
@@ -8,6 +5,9 @@ push.vbs
 # flask
 /apps/flask-mqtt/.spyproject
 /apps/flask-mqtt/__pycache__
+
+push.bat
+push.vbs
 
 
 
