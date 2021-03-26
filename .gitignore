@@ -1,3 +1,5 @@
+push.bat
+
 # react
 /apps/node-react/node_modules
 /apps/node-react/build
