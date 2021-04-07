@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "e8b32167-d092-4b17-b417-003d28196bc4",
+		"name": "flask endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Topic subscribe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\":\"testUser\",\n    \"model_id\":\"testModel\",\n    \"device_id\":\"testModel1\"\n}\n"
+				},
+				"url": {
+					"raw": "http://165.22.112.131/flask/unsubscribe",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"flask",
+						"unsubscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Topic unsubscribe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\":\"testUser\",\n    \"model_id\":\"testModel\",\n    \"device_id\":\"testModel1\"\n}\n"
+				},
+				"url": {
+					"raw": "http://165.22.112.131/flask/subscribe",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"flask",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get device history",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response contains a 'deviceHistory' array.\",  () => {",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.deviceHistory).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\":\"5f4e64e72023721e086f4c95\",\n    \"model_id\":\"NasaTurbofan\",\n    \"device_id\":\"f91\",\n    \"limit\": 10\n}\n"
+				},
+				"url": {
+					"raw": "http://165.22.112.131/flask/getDeviceHistory",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"flask",
+						"getDeviceHistory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get most recent msg",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response contains a 'restult' object.\",  () => {",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.result).to.be.an('object');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\":\"5f4e64e72023721e086f4c95\",\n    \"model_id\":\"NasaTurbofan\",\n    \"device_id\":\"f91\",\n    \"PdM\": \"ON\"\n}\n"
+				},
+				"url": {
+					"raw": "http://165.22.112.131/flask/getMostRecent",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"flask",
+						"getMostRecent"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

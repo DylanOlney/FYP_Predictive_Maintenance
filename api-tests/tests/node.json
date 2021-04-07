@@ -1,0 +1,448 @@
+{
+	"info": {
+		"_postman_id": "9496681f-b995-4ee8-baf2-28f020120bd8",
+		"name": "node/express enpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Site online test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is a HTML page.\",  () => {",
+							"    pm.expect(pm.response.text()).to.contain('<!doctype html>');",
+							"});",
+							"",
+							"pm.test(\"Response page has correct title.\",  () => {",
+							"    pm.expect(pm.response.text()).to.contain('<title>React App</title>');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has an 'userStatus' string property.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.userStatus).to.be.a('string');",
+							"    pm.expect(jsonData.userStatus).to.be.oneOf(['ok','not found']);",
+							"});",
+							"",
+							"pm.test(\"If user exists, response has a 'pw' string property, otherwise 'pw' is undefined.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"     if (jsonData.pw){",
+							"        pm.expect(jsonData.pw).to.be.a('string');",
+							"     }",
+							"     else{",
+							"        pm.expect(jsonData.pw).to.be.undefined;",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"If user exists, response has an 'userId' string property, otherwise 'userId' is undefined.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.userId){",
+							"        pm.expect(jsonData.userId).to.be.a('string');",
+							"    }",
+							"    else{",
+							"        pm.expect(jsonData.userId).to.be.undefined;",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/users/DylanOlney",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"users",
+						"DylanOlney"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user devices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has a 'devices' property which is an object.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.devices).to.be.an('object');",
+							"    ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/users/5f4e64e72023721e086f4c95/devices",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"users",
+						"5f4e64e72023721e086f4c95",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user device",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has a 'devices' property.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.devices).to.be.an('object');",
+							"    ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/users/5f4e64e72023721e086f4c95/devices/NasaTurbofan/f200?action=add",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"users",
+						"5f4e64e72023721e086f4c95",
+						"devices",
+						"NasaTurbofan",
+						"f200"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "add"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove user device",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has a 'devices' property.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.devices).to.be.an('object');",
+							"    ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/users/5f4e64e72023721e086f4c95/devices/NasaTurbofan/f200?action=remove",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"users",
+						"5f4e64e72023721e086f4c95",
+						"devices",
+						"NasaTurbofan",
+						"f200"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "remove"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has an 'userStatus' property.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.userStatus).to.be.a('string');",
+							"    pm.expect(jsonData.userStatus).to.be.oneOf(['ok','already exists']);",
+							"});",
+							"",
+							"pm.test(\"If user is new, response has a 'userId' property, otherwise 'userId' is undefined.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.userId){",
+							"        pm.expect(jsonData.userId).to.be.a('string');",
+							"    }",
+							"    else{",
+							"        pm.expect(jsonData.userId).to.be.undefined;",
+							"    }",
+							"   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"passwd\":\"testPW\"\n}"
+				},
+				"url": {
+					"raw": "http://165.22.112.131/api/users/TestUser",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"users",
+						"TestUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all model names",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response contains a 'modelNames' array.\",  () => {",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.modelNames).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/models/getModelNames",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"models",
+						"getModelNames"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get model",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has a JSON body.\",  () => {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Response has a 'msg' string property.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.msg).to.be.a('string');",
+							"    pm.expect(jsonData.msg).to.be.oneOf(['model found','model not found']);",
+							"});",
+							"",
+							"pm.test(\"If model exists, response has a 'model' object property, otherwise 'model' is undefined.\",  () =>  {",
+							"    var jsonData = pm.response.json();",
+							"     if (jsonData.model){",
+							"        pm.expect(jsonData.model).to.be.an('object');",
+							"     }",
+							"     else{",
+							"        pm.expect(jsonData.model).to.be.undefined;",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://165.22.112.131/api/models/NasaTurbofan",
+					"protocol": "http",
+					"host": [
+						"165",
+						"22",
+						"112",
+						"131"
+					],
+					"path": [
+						"api",
+						"models",
+						"NasaTurbofan"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
