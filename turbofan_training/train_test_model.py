@@ -12,7 +12,7 @@ from sklearn import svm
 from sklearn import model_selection
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
-
+import time
 
 
 """ Pre-processing:
@@ -113,19 +113,31 @@ def crossVal(classifier, nSplits):
 
 
 def main():
-    
+     print("\nTraining SVC model with turbofan training dataset... ", end = '')
      train_data, train_labels, test_data, test_labels = preprocess()
      clf = make_pipeline(StandardScaler(), svm.SVC(gamma='auto'))  
      model = clf.fit(train_data, train_labels) 
-     pickle.dump(model, open("NasaTurbfan.sav", 'wb'))
+     pickle.dump(model, open("../apps/flask-mqtt/models/NasaTurbfan.sav", 'wb'))
      #model = pickle.load(open("NasaTurbofan.sav",'rb'))
-    
+     print("Done!")   
+     
+     print("Testing trained model against turbofan test dataset... ", end = '')
+     pr_start =  time.time()
      predictions = model.predict(test_data)
+     pr_stop =  time.time()
+     predTime = float(pr_stop - pr_start)/len(test_data)
+     predTime = predTime * (10**6)
      score = metrics.accuracy_score(test_labels, predictions)
      cMatrix = metrics.confusion_matrix(test_labels, predictions)
-     print("Accuracy score: " + str(score))
-     print("Confusion Matrix:")
+     print("Done!\n") 
+     print("--------------------------------------")   
+     print("Test results:")
+     print("--------------------------------------")   
+     print("\nAccuracy score = " + str(round(score,4)))
+     print("\nAvg. prediction time = " + str( round(predTime,2 )) + " \u03BCs.")
+     print("\nConfusion Matrix:\n")
      print(cMatrix)
+     print("\n--------------------------------------")   
      
      
 main()
