@@ -15,7 +15,7 @@ def main():
     file = open("f91.txt", 'r')
   
     user_id = "5f4e64e72023721e086f4c95" #"602b1ac86e61b66332040b52"  
-    model_id = "NasaTurbofan"
+    model_id = "myModel" #"NasaTurbofan"
     
     for line in file.readlines():
             time.sleep(1)
@@ -23,7 +23,7 @@ def main():
             data = line.split(',')
             
            
-            device_id = "f" + data[0]
+            device_id = "myDevice" #+ data[0]
 
             #deviceDict = dict()
             varsDict = dict()
